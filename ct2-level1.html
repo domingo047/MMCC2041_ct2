@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Hermit Crab Video</title>
+    <link rel="stylesheet" href="ct2-level1.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script>
+        $(function() {
+            const $video = $('#hermitVideo');
+            const $playPauseBtn = $('#playPause');
+            const $back5Btn = $('#back5');
+            const $forward5Btn = $('#forward5');
+            const $captionDiv = $('#caption');
+
+            // Hide native controls
+            $video.prop('controls', false);
+
+            // Caption data
+            const captions = [
+                { time: 1, text: "Hermit Crabs." },
+                { time: 5, text: "Hermit crabs are decapod crustaceans…" },
+                { time: 12, text: "As hermit crabs grow…" },
+                { time: 20, text: "Hermit crabs with too-small shells…" },
+                { time: 30, text: 'You can read more on <a class="caption-link" href="https://en.wikipedia.org/wiki/Hermit_crab" target="_blank">Wikipedia</a>' }
+            ];
+
+            let lastCaptionIdx = -1;
+
+            function updateCaption() {
+                const t = $video[0].currentTime;
+                let idx = -1;
+                for (let i = 0; i < captions.length; i++) {
+                    if (t >= captions[i].time) idx = i;
+                    else break;
+                }
+                if (idx !== lastCaptionIdx) {
+                    $captionDiv.html(idx >= 0 ? captions[idx].text : '');
+                    lastCaptionIdx = idx;
+                }
+            }
+
+            $video.on('timeupdate', updateCaption);
+
+            // Play/Pause button logic
+            $playPauseBtn.on('click', function() {
+                if ($video[0].paused || $video[0].ended) {
+                    $video[0].play();
+                    $playPauseBtn.text('Pause');
+                } else {
+                    $video[0].pause();
+                    $playPauseBtn.text('Play');
+                }
+            });
+
+            // Update button on play/pause
+            $video.on('play', function() {
+                $playPauseBtn.text('Pause');
+            });
+            $video.on('pause', function() {
+                $playPauseBtn.text('Play');
+            });
+
+            // Seek buttons
+            $back5Btn.on('click', function() {
+                $video[0].currentTime = Math.max(0, $video[0].currentTime - 5);
+                updateCaption();
+            });
+            $forward5Btn.on('click', function() {
+                $video[0].currentTime = Math.min($video[0].duration, $video[0].currentTime + 5);
+                updateCaption();
+            });
+
+            // When video ends, stay on last frame, reset play/pause button
+            $video.on('ended', function() {
+                $playPauseBtn.text('Play');
+                updateCaption();
+            });
+
+            // Initial caption
+            $video.on('loadedmetadata', updateCaption);
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="video-wrapper">
+            <video id="hermitVideo" src="https://mmcc.mq.edu.au/mmcc2041/resources/ct2/hermit-crab.mp4" preload="metadata"></video>
+            <div class="controls">
+                <button id="back5">−5s</button>
+                <button id="playPause">Play</button>
+                <button id="forward5">+5s</button>
+            </div>
+            <div class="caption" id="caption"></div>
+        </div>
+    </div>
+</body>
+</html>
