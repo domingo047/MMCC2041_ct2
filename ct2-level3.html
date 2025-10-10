@@ -2,22 +2,13 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hermit Crab Video</title>
+    <title>Coding Task 2 (Level 3)</title>
     <link rel="stylesheet" href="ct2-level3.css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script>
         $(function() {
-            const $video = $('#hermitVideo');
-            const $playPauseBtn = $('#playPause');
-            const $back5Btn = $('#back5');
-            const $forward5Btn = $('#forward5');
-            const $captionDiv = $('#caption');
-            const $videoWrapper = $('.video-wrapper');
-            const $controls = $('.controls-overlay');
-            let hideControlsTimeout;
-
-            $video.prop('controls', false);
+            $('#hermitVideo').prop('controls', false);
 
             const captions = [
                 { time: 1, text: "Hermit Crabs.", large: true},
@@ -27,52 +18,64 @@
                 { time: 30, text: 'You can read more on <a class="caption-link" href="https://en.wikipedia.org/wiki/Hermit_crab" target="_blank">Wikipedia</a>' }
             ];
 
-            $video.on('timeupdate', function() {
-                const t = $video[0].currentTime;
+            $('#hermitVideo').on('timeupdate', function() {
                 let idx = -1;
                 for (let i = 0; i < captions.length; i++) {
-                    if (t >= captions[i].time) idx = i;
+                    if (this.currentTime >= captions[i].time) idx = i;
                     else break;
                 }
                 if (idx >= 0) {
-                    $captionDiv
+                    $('#caption')
                         .html(captions[idx].text)
                         .toggleClass('large', !!captions[idx].large);
                 } else {
-                    $captionDiv.html('').removeClass('large');
+                    $('#caption').html('').removeClass('large');
+                }
+                if (this.duration) {
+                    $('#videoProgress').attr('value', this.currentTime / this.duration);
                 }
             });
 
-            $videoWrapper.on('mouseenter', function() {
-                $controls.css({opacity: 1, pointerEvents: 'auto'});
-                clearTimeout(hideControlsTimeout);
+            $('.video-wrapper').on('mouseenter', function() {
+                $('.controls-overlay').css({opacity: 1});
             });
 
-            $videoWrapper.on('mouseleave', function() {
-                hideControlsTimeout = setTimeout(function() {
-                    $controls.css({opacity: 0, pointerEvents: 'none'});
-                }, 300);
+            $('.video-wrapper').on('mouseleave', function() {
+                $('.controls-overlay').css({opacity: 0});
             });
 
-            $playPauseBtn.on('click', function() {
-                if ($video[0].paused || $video[0].ended) {
-                    $video[0].play();
-                    $playPauseBtn.find('span').text('pause');
+            $('#playPause').on('click', function() {
+                const video = $('#hermitVideo')[0];
+                if (video.paused || video.ended) {
+                    video.play();
+                    $('#playPause').find('span').text('pause');
                 } else {
-                    $video[0].pause();
-                    $playPauseBtn.find('span').text('play_arrow');
+                    video.pause();
+                    $('#playPause').find('span').text('play_arrow');
                 }
             });
 
-            $back5Btn.on('click', function() {
-                $video[0].currentTime = Math.max(0, $video[0].currentTime - 5);
+            $('#back5').on('click', function() {
+                const video = $('#hermitVideo')[0];
+                video.currentTime = Math.max(0, video.currentTime - 5);
             });
-            $forward5Btn.on('click', function() {
-                $video[0].currentTime = Math.min($video[0].duration, $video[0].currentTime + 5);
+            $('#forward5').on('click', function() {
+                const video = $('#hermitVideo')[0];
+                video.currentTime = Math.min(video.duration, video.currentTime + 5);
             });
 
-            $video.on('ended', function() {
-                $playPauseBtn.find('span').text('play_arrow');
+            $('#hermitVideo').on('ended', function() {
+                $('#playPause').find('span').text('play_arrow');
+            });
+
+            $('#videoProgress').on('click', function(event) {
+                let clickLocationX = event.pageX;
+                let offsetLeft = $('progress').offset().left;
+                let progressWidth = $('progress').width();
+                let fraction = (clickLocationX - offsetLeft) / progressWidth;
+                let dur = $('#hermitVideo')[0].duration;
+                $('progress').attr('value', fraction);
+                $('#hermitVideo')[0].currentTime = dur * fraction;
             });
         });
     </script>
@@ -87,7 +90,8 @@
                 <button id="forward5"><span class="material-symbols-outlined">forward_5</span></button>
             </div>
             <video id="hermitVideo" src="hermit-crab.mp4" preload="metadata"></video>
-            <div class="caption" id="caption"></div>
+            <div id="caption" class="caption"></div>
+            <progress id="videoProgress" max="1" value="0"></progress>
         </div>
     </div>
 </body>
