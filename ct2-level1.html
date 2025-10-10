@@ -19,28 +19,23 @@
             // Caption data
             const captions = [
                 { time: 1, text: "Hermit Crabs." },
-                { time: 5, text: "Hermit crabs are decapod crustaceans…" },
-                { time: 12, text: "As hermit crabs grow…" },
-                { time: 20, text: "Hermit crabs with too-small shells…" },
+                { time: 5, text: "Hermit crabs are decapod crustaceans of the superfamily Paguroidea. Most of the approximately 1,110 species possess an asymmetric abdomen concealed in a scavenged mollusc shell." },
+                { time: 12, text: "As hermit crabs grow, they require larger shells. Since suitable intact gastropod shells are sometimes a limited resource, vigorous competition often occurs among hermit crabs for shells." },
+                { time: 20, text: "Hermit crabs with too-small shells cannot grow as fast as those with well-fitting shells, and are more likely to be eaten if they cannot retract completely into the shell. Therefore, as the hermit crab grows in size, it must find a larger shell and abandon the previous one." },
                 { time: 30, text: 'You can read more on <a class="caption-link" href="https://en.wikipedia.org/wiki/Hermit_crab" target="_blank">Wikipedia</a>' }
             ];
 
-            let lastCaptionIdx = -1;
-
-            function updateCaption() {
+            $video.on('timeupdate', function() {
                 const t = $video[0].currentTime;
                 let idx = -1;
                 for (let i = 0; i < captions.length; i++) {
                     if (t >= captions[i].time) idx = i;
                     else break;
                 }
-                if (idx !== lastCaptionIdx) {
-                    $captionDiv.html(idx >= 0 ? captions[idx].text : '');
-                    lastCaptionIdx = idx;
-                }
-            }
+                $captionDiv.html(idx >= 0 ? captions[idx].text : '');
+            });
 
-            $video.on('timeupdate', updateCaption);
+            
 
             // Play/Pause button logic
             $playPauseBtn.on('click', function() {
@@ -85,9 +80,10 @@
 <body>
     <div class="container">
         <div class="video-wrapper">
-            <video id="hermitVideo" src="https://mmcc.mq.edu.au/mmcc2041/resources/ct2/hermit-crab.mp4" preload="metadata"></video>
+            <video id="hermitVideo" src="hermit-crab.mp4" preload="metadata"></video>
             <div class="controls">
-                <button id="back5">−5s</button>
+                <button id="back5">−5s</button> 
+
                 <button id="playPause">Play</button>
                 <button id="forward5">+5s</button>
             </div>

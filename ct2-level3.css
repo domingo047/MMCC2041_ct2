@@ -1,0 +1,80 @@
+body {
+  background-color: #4b4b4b;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+}
+.container {
+  margin: auto;
+  width: 1000px;
+}
+.video-wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 900px;
+  margin: auto;
+}
+video {
+  width: 100%;
+  display: block;
+}
+.controls-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 24px;
+  z-index: 2;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.video-wrapper:hover .controls-overlay,
+.controls-overlay:focus-within {
+  opacity: 1;
+  pointer-events: auto;
+}
+.controls-overlay button {
+  background-color: rgba(34,34,34,0.5);
+  color: white;
+  font-size: 24px;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  cursor: pointer;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+.controls-overlay button:hover,
+.controls-overlay:focus-within button {
+  background: #222;
+}
+.caption {
+  font-size: 16px;
+  color: white;
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  background: rgba(34,34,34,0.7);
+  padding: 16px 24px;
+  z-index: 2;
+  pointer-events: none;
+  margin: 0;
+  min-width: 200px;
+  max-width: 40%;
+  text-align: left;
+}
+.caption.large {
+  font-size: 40px;
+  font-weight: bold;
+}
+a.caption-link {
+  color: #fff;
+  text-decoration: underline;
+  font-size: 20px;
+}
