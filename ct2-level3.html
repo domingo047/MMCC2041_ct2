@@ -24,14 +24,16 @@
                     if (this.currentTime >= captions[i].time) idx = i;
                     else break;
                 } //Find the caption based on current time
-                if (idx >= 0) {
-                    $('#caption')
-                        .html(captions[idx].text)
-                        .toggleClass('large', !!captions[idx].large)
+                
+                if (idx >= 0) { //If a caption exists for the current time
+                    $('#caption') 
+                        .html(captions[idx].text) //Update caption text
+                        .toggleClass('large', !!captions[idx].large) // Turns on large class if caption has large property set to true 
                         .css('display', 'block'); //Show caption if exists and toggle large class if needed
                 } else {
                     $('#caption').html('').removeClass('large').css('display', 'none');
                 } //Update caption text and size
+
                 if (this.duration) {
                     $('#videoProgress').attr('value', this.currentTime / this.duration);
                 } //Update progress bar
@@ -84,8 +86,8 @@
     <div main class="container"> <!-- Main container and holds everything-->
         <section class="video-wrapper"> <!-- Wrapper for video and controls -->
 
-            <nav class="controls-overlay" aria-label="Video controls"> <!-- Wrapper for video controls -->
-                <button id="back5" aria-label="Rewind 5 seconds">
+            <nav class="controls-overlay" aria-label="Video controls"> <!-- Wrapper for video controls and aria labels for accessibility-->
+                <button id="back5" aria-label="Rewind 5 seconds"> 
                     <span class="material-symbols-outlined">replay_5</span>
                 </button>
 
@@ -98,8 +100,8 @@
                 </button>
             </nav>
 
-            <figure>
-                <video id="hermitVideo" src="hermit-crab.mp4" preload="metadata"></video>
+            <figure> <!-- Figure to hold video, caption and progress bar -->
+                <video id="hermitVideo" src="https://mmcc.mq.edu.au/mmcc2041/resources/ct2/hermit-crab.mp4" preload="metadata"></video>
                 <figcaption id="caption" class="caption"></figcaption>
                 <progress id="videoProgress" max="1" value="0"></progress>
             </figure>
