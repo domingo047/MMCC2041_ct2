@@ -3,96 +3,108 @@
 <head>
     <meta charset="UTF-8">
     <title>Coding Task 2 (Level 3)</title>
-    <link rel="stylesheet" href="ct2-level3.css">
-    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <link rel="stylesheet" href="ct2-level3.css">  <!-- Link to the CSS file -->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" /> <!-- Google Material Icons -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script> <!-- jQuery library -->
     <script>
         $(function() {
-            $('#hermitVideo').prop('controls', false);
+            $('#hermitVideo').prop('controls', false); //Remove controls from video
 
             const captions = [
-                { time: 1, text: "Hermit Crabs.", large: true},
+                { time: 1, text: "Hermit Crabs.", large: true}, // Large text caption
                 { time: 5, text: "Hermit crabs are decapod crustaceans of the superfamily Paguroidea. Most of the approximately 1,110 species possess an asymmetric abdomen concealed in a scavenged mollusc shell." },
                 { time: 12, text: "As hermit crabs grow, they require larger shells. Since suitable intact gastropod shells are sometimes a limited resource, vigorous competition often occurs among hermit crabs for shells." },
                 { time: 20, text: "Hermit crabs with too-small shells cannot grow as fast as those with well-fitting shells, and are more likely to be eaten if they cannot retract completely into the shell. Therefore, as the hermit crab grows in size, it must find a larger shell and abandon the previous one." },
-                { time: 30, text: 'You can read more on <a class="caption-link" href="https://en.wikipedia.org/wiki/Hermit_crab" target="_blank">Wikipedia</a>' }
-            ];
+                { time: 30, text: 'You can read more on <a class="caption-link" href="https://en.wikipedia.org/wiki/Hermit_crab" target="_blank">Wikipedia</a>' } // Caption with a link to wikipedia article
+            ]; //Array of captions with time and text
 
             $('#hermitVideo').on('timeupdate', function() {
                 let idx = -1;
                 for (let i = 0; i < captions.length; i++) {
                     if (this.currentTime >= captions[i].time) idx = i;
                     else break;
-                }
+                } //Find the caption based on current time
                 if (idx >= 0) {
                     $('#caption')
                         .html(captions[idx].text)
-                        .toggleClass('large', !!captions[idx].large);
+                        .toggleClass('large', !!captions[idx].large)
+                        .css('display', 'block'); //Show caption if exists and toggle large class if needed
                 } else {
-                    $('#caption').html('').removeClass('large');
-                }
+                    $('#caption').html('').removeClass('large').css('display', 'none');
+                } //Update caption text and size
                 if (this.duration) {
                     $('#videoProgress').attr('value', this.currentTime / this.duration);
-                }
+                } //Update progress bar
             });
 
             $('.video-wrapper').on('mouseenter', function() {
                 $('.controls-overlay').css({opacity: 1});
-            });
+            }); //Show controls once mouse hovers over video
 
             $('.video-wrapper').on('mouseleave', function() {
                 $('.controls-overlay').css({opacity: 0});
-            });
+            }); // Hide controls once mouse leaves video
 
-            $('#playPause').on('click', function() {
-                const video = $('#hermitVideo')[0];
-                if (video.paused || video.ended) {
-                    video.play();
-                    $('#playPause').find('span').text('pause');
+            $('#playPause').on('click', function() { 
+                if ($('#hermitVideo')[0].paused || $('#hermitVideo')[0].ended) { //Check if video is paused or ended
+                    $('#hermitVideo')[0].play(); //Play the video
+                    $('#playPause').find('span').text('pause'); //Change icon to pause
                 } else {
-                    video.pause();
-                    $('#playPause').find('span').text('play_arrow');
+                    $('#hermitVideo')[0].pause(); //Pause the video
+                    $('#playPause').find('span').text('play_arrow'); //Change icon to play
                 }
-            });
+            }); 
 
-            $('#back5').on('click', function() {
-                const video = $('#hermitVideo')[0];
-                video.currentTime = Math.max(0, video.currentTime - 5);
-            });
+            $('#back5').on('click', function() { 
+                $('#hermitVideo')[0].currentTime = Math.max(0, $('#hermitVideo')[0].currentTime - 5);
+            }); //Rewind video by 5 seconds while making sure it doesn't go below 0 seconds
+
             $('#forward5').on('click', function() {
-                const video = $('#hermitVideo')[0];
-                video.currentTime = Math.min(video.duration, video.currentTime + 5);
-            });
+                $('#hermitVideo')[0].currentTime = Math.min($('#hermitVideo')[0].duration, $('#hermitVideo')[0].currentTime + 5);
+            }); //Fast forward video by 5 seconds while making sure it doesn't exceed total duration of the video
 
             $('#hermitVideo').on('ended', function() {
-                $('#playPause').find('span').text('play_arrow');
+                $('#playPause').find('span').text('play_arrow'); //Change icon to play when video ends
             });
 
-            $('#videoProgress').on('click', function(event) {
-                let clickLocationX = event.pageX;
-                let offsetLeft = $('progress').offset().left;
-                let progressWidth = $('progress').width();
-                let fraction = (clickLocationX - offsetLeft) / progressWidth;
-                let dur = $('#hermitVideo')[0].duration;
-                $('progress').attr('value', fraction);
-                $('#hermitVideo')[0].currentTime = dur * fraction;
+            $('#videoProgress').on('click', function(event) { //Seek video to clicked position on progress bar
+                let clickLocationX = event.pageX; //Get X coordinate of click
+                let offsetLeft = $('progress').offset().left; //Get left offset of progress bar
+                let progressWidth = $('progress').width(); //Get width of progress bar
+                let fraction = (clickLocationX - offsetLeft) / progressWidth; //Calculate fraction of progress bar clicked
+                let dur = $('#hermitVideo')[0].duration; //Get total duration of video
+                $('progress').attr('value', fraction); //Update progress bar
+                $('#hermitVideo')[0].currentTime = dur * fraction; //Seek video to the seleceted time
             });
         });
     </script>
 </head>
 
 <body>
-    <div class="container">
-        <div class="video-wrapper">
-            <div class="controls-overlay">
-                <button id="back5"><span class="material-symbols-outlined">replay_5</span></button>
-                <button id="playPause"><span class="material-symbols-outlined">play_arrow</span></button>
-                <button id="forward5"><span class="material-symbols-outlined">forward_5</span></button>
-            </div>
-            <video id="hermitVideo" src="hermit-crab.mp4" preload="metadata"></video>
-            <div id="caption" class="caption"></div>
-            <progress id="videoProgress" max="1" value="0"></progress>
-        </div>
+    <div main class="container"> <!-- Main container and holds everything-->
+        <section class="video-wrapper"> <!-- Wrapper for video and controls -->
+
+            <nav class="controls-overlay" aria-label="Video controls"> <!-- Wrapper for video controls -->
+                <button id="back5" aria-label="Rewind 5 seconds">
+                    <span class="material-symbols-outlined">replay_5</span>
+                </button>
+
+                <button id="playPause" aria-label="Play/Pause">
+                    <span class="material-symbols-outlined">play_arrow</span>
+                </button>
+
+                <button id="forward5" aria-label="Fast forward 5 seconds">
+                    <span class="material-symbols-outlined">forward_5</span>
+                </button>
+            </nav>
+
+            <figure>
+                <video id="hermitVideo" src="hermit-crab.mp4" preload="metadata"></video>
+                <figcaption id="caption" class="caption"></figcaption>
+                <progress id="videoProgress" max="1" value="0"></progress>
+            </figure>
+
+        </section>
     </div>
 </body>
 </html>

@@ -1,82 +1,91 @@
 body {
-  background-color: #ebebeb;
-  display: flex;
-  height: 100vh;
+  background-color: #ebebeb; 
+  display: flex; /* Helps center content horizontally */
+  height: 100vh; 
 }
 .container {
   margin: auto;
-  width: 1000px;
+  width: 1000px; /* Fixed width for the container */
 }
-.video-wrapper {
-  position: relative;
+.video-wrapper figure {
+  position: relative; /* For absolute positioning of caption and progress */
   width: 100%;
-  max-width: 900px;
+  max-width: 900px; /* Max width video */
   margin: auto;
 }
 video {
-  width: 100%;
+  width: 100%; /* Responsive video width */
 }
 .video-wrapper:hover video {
-  filter: brightness(0.7);
+  filter: brightness(0.7); /* Dims video when hovering */
 }
 .controls-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  display: flex;
-  gap: 24px;
-  z-index: 2;
-  opacity: 0;
-  transition: opacity 0.75s;
+  position: absolute; /* Float controls over video */
+  top: 50%; /* Center vertically */
+  left: 50%; /* Center horizontally */
+  transform: translate(-50%, -50%); /* Helps centering controls */
+  display: flex; /* Put buttons in a row */
+  align-items: center; /* Center buttons vertically */
+  gap: 24px; /* Space between buttons */
+  z-index: 2; /* Ensure controls are above video */
+  opacity: 0; /* Start hidden */
+  transition: opacity 0.75s; /* Fade-in/out */
+}
+#playPause { /* Larger play/pause button */
+  width: 100px; 
+  height: 100px;
+}
+#playPause .material-symbols-outlined {
+  font-size: 48px; /* Icon size */
 }
 .controls-overlay button {
-  background-color: rgba(34,34,34,0.5);
-  color: white;
-  width: 60px;
-  height: 60px;
-  border-radius: 50%;
-  cursor: pointer;
-  border: none;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background-color: rgba(34,34,34,0.5); /* Semi-transparent background for buttons */
+  color: white; /* Color of icons */
+  width: 60px; 
+  height: 60px; 
+  border-radius: 50%; /* Circular buttons */
+  cursor: pointer; /* Pointer cursor on hover */
+  border: none; /* Removes border */
+  display: flex; 
+  align-items: center; /* Center buttons */
+  justify-content: center; /* Center buttons */
 }
 .controls-overlay button:hover,
 .controls-overlay:focus-within button {
-  background: #222222;
+  background: #222222; /* Darker background on hover/focus */
 }
 .caption {
+  font-family: Arial, Helvetica, sans-serif;
   font-size: 16px;
   color: white;
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
-  background: rgba(19, 19, 19, 0.8);
+  position: absolute; /* Position over video */
+  right: 20px; 
+  bottom: 20px; 
+  background: rgba(17, 17, 17, 0.75); 
   padding: 16px 24px;
   z-index: 2;
-  min-width: 200px;
-  max-width: 40%;
+  min-width: 200px; /* Minimum width for caption */
+  max-width: 40%; /* Max width relative to video */
   text-align: left;
+  display: none; /* Hidden by default */
 }
 .caption.large {
-  font-size: 40px;
+  font-size: 40px; /* Larger font for "Hermit Crab" caption */
   font-weight: bold;
 }
 progress {
-  position: absolute;
+  position: absolute; /* Position over video */
   left: 5px;
-  bottom: 3px;
+  bottom: 5px;
   width: 99%;
   height: 12px;
   z-index: 3;
-  display: block;
-  cursor: pointer;
+  cursor: pointer; /* Pointer cursor on hover */
 }
 .video-wrapper progress {
-  opacity: 1;
-  transition: opacity 0.75s;
+  opacity: 1; /* Visible when hovering over video */
+  transition: opacity 0.75s; /* Fade-in/out */
 }
 .video-wrapper:not(:hover) progress {
-  opacity: 0;
+  opacity: 0; /* Hidden when not hovering */
 }
